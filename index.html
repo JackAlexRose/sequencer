@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>The FM Sequencer</title>
+    
+    <script src="js/Tone.js"></script>
+    <script src="js/nexusUI.js"></script>
+	<script src="js/functions.js"></script>
+	
+	<link href="css/style.css" rel="stylesheet">
+    
+</head>
+<body width="100%" height="100%">
+
+
+  <div id="sequencerArea">
+    <canvas nx="matrix" id="matrix1"></canvas>
+  </div>
+  <br>
+  <br>
+  <div id="controlsArea">
+	<canvas label="bpm" id="number1" nx="number"></canvas>
+	<canvas label="Harmony" id="harmonicity" nx="dial"></canvas>
+	<canvas label="Mod Index"   id="modulationIndex" nx="dial"></canvas>
+	<canvas label="LPF Cutoff" id="slider1" nx="slider"></canvas>
+	<canvas label="HPF Cutoff" id="slider2" nx="slider"></canvas>
+	<canvas label="Clear" id="button1" nx="button"></canvas>
+	<canvas label="Randomise" id="toggle1" nx="toggle"></canvas>
+  </div>
+   
+  <script>
+  
+	Tone.Transport.bpm.value = 120
+	var osc = [11];
+	var oscFreq = [11];
+	
+	oscFreq[11] = 261.63
+	oscFreq[10] = 277.18
+	oscFreq[9] = 293.66
+	oscFreq[8] = 311.13
+	oscFreq[7] = 329.63
+	oscFreq[6] = 349.23
+	oscFreq[5] = 369.99
+	oscFreq[4] = 392
+	oscFreq[3] = 415.3
+	oscFreq[2] = 440
+	oscFreq[1] = 466.16
+	oscFreq[0] = 493.88
+	
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        var synth = new Tone.PolySynth(12, Tone.FMSynth);
+	
+	var filter1 = new Tone.Filter({
+	type : 'lowpass',
+	Q : 10,
+	rolloff:-24
+	})
+	
+	var filter2 = new Tone.Filter({
+	type : 'highpass',
+	Q : 10,
+	rolloff:-24
+	})
+	
+
+	synth.set({
+		harmonicity: 0.25,
+		volume: -10,
+		oscillator:{
+			type:"fmsquare"
+		},
+		envelope:{
+			attack:0.3,
+			decay:0,
+			sustain:1,
+			release:3
+		},
+		filterEnvelope:{
+			attack:0.2,
+			decay:0,
+			sustain:1,
+			release:0.2,
+			min:20,
+			max:20,
+			exponent:2,
+		},
+		modulationEnvelope:{
+		release: 3
+	}});
+	
+	synth.connect(filter1); 
+	filter1.connect(filter2);
+	filter2.connect(Tone.Master);
+	
+    nx.onload = function() {
+		
+		harmonicity.min = 0.1;
+		harmonicity.max = 2;
+		harmonicity.val.value = 0.25;
+		harmonicity.init();
+		harmonicity.on('*',function(data) {
+					synth.set("harmonicity",harmonicity.val.value)
+					});
+		modulationIndex.min = 0;
+		modulationIndex.max = 100;
+		modulationIndex.val.value = 15;
+		modulationIndex.init();
+		modulationIndex.on("*", function(data){
+		synth.set("modulationIndex", modulationIndex.val.value);
+		});
+
+		matrix1.col = 16;
+        matrix1.row = 12;
+        matrix1.init();
+        
+		nx.colorize("#21FF86");
+		nx.colorize("fill", "#464646");
+		
+		slider1.min = 0;
+		slider1.max = 15000;
+		slider1.mode = "relative";
+		slider1.val.value = 15000;
+		slider1.on("*", slider1Actions);
+		
+		slider2.min = 0;
+		slider2.max = 15000;
+		slider2.mode = "relative";
+		slider2.val.value = 0;
+		slider2.on("*", slider2Actions);
+		
+		var tempo = 120;
+		matrix1.sequence(120); 
+		matrix1.on("*", matrixActions);
+		
+		button1.mode = "impulse";
+		button1.on("*", buttonActions);
+		
+		toggle1.on("*", toggleActions);
+		
+		number1.min = 60;
+		number1.max = 200;
+		number1.set({
+			value: 120
+		})
+		number1.on("*", numberActions);
+	};
+	
+  </script>
+  
+</body>
+</html>
+
+

@@ -1,0 +1,58 @@
+body, html {
+            width: 100%;
+            height: 100%;
+        }
+
+        div#sequencerArea {
+            margin-top: 2%;
+            margin-left: 2%;
+            width: 65%;
+            height: 65%;
+        }
+		
+		div#controlsArea {
+			margin-top: 2%;
+            width: 90%;
+            height: 90%;
+        }
+
+        canvas {
+            display: block;
+            float: left;
+        }
+   
+        canvas[nx="matrix"] {
+        height: 100%;
+        width: 100%;
+        }
+		
+		canvas[nx="dial"] {
+        height: 10%;
+        width: 10%;
+        }
+		
+		canvas[nx="slider"] {
+        height: 10%;
+        width: 20%;
+		margin-left: 0.5%;
+        }
+		
+		canvas[nx="button"] {
+        height: 10%;
+        width: 5%;
+		margin-left: 0.5%;
+        }
+		
+		canvas[nx="toggle"] {
+        height: 10%;
+        width: 5%;
+		margin-left: 0.5%;
+        }
+		
+		canvas[nx="number"] {
+        height: 10%;
+        width: 10%;
+		margin-left: 2%
+		margin-top: 2%
+        }
+		
