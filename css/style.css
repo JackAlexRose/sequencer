@@ -51,7 +51,7 @@ body, html {
 		
 		canvas[nx="number"] {
         height: 10%;
-        width: 10%;
+        width: 20%;
 		margin-left: 2%
 		margin-top: 2%
         }
